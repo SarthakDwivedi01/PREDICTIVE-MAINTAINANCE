@@ -6,14 +6,15 @@ router = APIRouter()
 
 @router.post("/predict")
 def make_prediction(sensor_data: dict):
-    # 1. Get the prediction
+
     prediction = predict_failure(sensor_data)
-    
-    # 2. Get the actionable recommendation based on the prediction
+
     action = get_maintenance_action(prediction)
-    
-    # 3. Return the combined response
+
     return {
-        "prediction": prediction,
+        "prediction": prediction.get("prediction"),
+        "failure_probability": prediction.get("failure_probability"),
+        "status": prediction.get("status"),
+        "message": prediction.get("message"),
         "recommended_action": action
     }
